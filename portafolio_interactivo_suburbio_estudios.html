@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suburbio Estudios - Portafolio Creativo & Ecosistema Musical</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800;900&family=Anton&family=Archivo+Black&display=swap" rel="stylesheet">
+
+    <!-- Custom Styling & Animations -->
+    <style>
+        @font-face {
+            font-family: 'Reservoir Grunge';
+            src: url('resegrg.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #080c10;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .font-heading {
+            font-family: 'Reservoir Grunge', 'Outfit', sans-serif;
+            font-weight: normal;
+        }
+        /* Hero principal: tipografía previa (no Reservoir) */
+        .hero-title {
+            font-family: 'Anton', 'Archivo Black', 'Outfit', sans-serif;
+            font-weight: 400;
+        }
+        /* Palabras con Reservoir Grunge (sin bold) */
+        .reservoir-g {
+            font-family: 'Reservoir Grunge', 'Outfit', sans-serif;
+            font-weight: normal;
+        }
+        /* Títulos de cards de post: tipografía de la primera versión */
+        .card-title {
+            font-family: 'Anton', 'Archivo Black', 'Outfit', sans-serif;
+            font-weight: 400;
+        }
+
+        /* Hero Background: estático (no cascada), sobre negro, gradiente a la derecha a 0% */
+        .hero-bg-left {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(to right, #000000 0%, #000000 35%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0) 100%), url('Fondo.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(16, 185, 129, 0.45);
+            box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.25);
+        }
+
+        /* Neon Glow Effects */
+        .glow-emerald {
+            text-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-neon {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-neon:hover {
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+            transform: scale(1.02);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #080c10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 4px;
+        }
+
+        /* ===== Fullscreen Intro Overlay ===== */
+        #intro-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background-color: #000;
+            display: block;
+            overflow: hidden;
+            transition: opacity 0.8s ease;
+        }
+        #intro-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        /* Capa del GIF: se va asomando gradualmente desde negro hasta opacidad 100 (~3s) */
+        .intro-gif {
+            position: absolute;
+            inset: 0;
+            background-image: url('gif_suburbio3.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation: gifReveal 3s linear forwards;
+        }
+        @keyframes gifReveal {
+            0%   { opacity: 0; }
+            25%  { opacity: 0.08; }
+            50%  { opacity: 0.3; }
+            75%  { opacity: 0.65; }
+            100% { opacity: 1; }
+        }
+
+        .intro-portafolio {
+            position: absolute;
+            top: 46%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            text-align: center;
+            font-family: 'Reservoir Grunge', 'Anton', 'Archivo Black', 'Outfit', sans-serif;
+            font-weight: 400;
+            font-size: clamp(2.333rem, 17.5vw, 42.1rem);
+            line-height: 0.68;
+            letter-spacing: 0;
+            text-transform: uppercase;
+            color: transparent;
+            -webkit-text-stroke: 2px #ffffff;
+            text-shadow: 0 0 30px rgba(255,255,255,0.5);
+            mix-blend-mode: screen;
+            animation: toGreen 2.4s forwards, portafolioFade 5.5s forwards;
+            user-select: none;
+            pointer-events: none;
+        }
+        @keyframes toGreen {
+            0%   { color: transparent; -webkit-text-stroke-color: #ffffff; text-shadow: 0 0 30px rgba(255,255,255,0.5); }
+            100% { color: transparent; -webkit-text-stroke-color: #10b981; text-shadow: 0 0 40px rgba(16,185,129,0.4); }
+        }
+        /* Las letras PORTAFOLIO van desvaneciendo poco a poco */
+        @keyframes portafolioFade {
+            0%   { opacity: 1; }
+            60%  { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .intro-portafolio .ch {
+            display: inline-block;
+            opacity: 0;
+            animation: charIn 0.45s forwards;
+        }
+        @keyframes charIn {
+            0%   { opacity: 0; transform: translateY(0.9em) scale(1.6); }
+            60%  { opacity: 1; }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .btn-comenzar {
+            position: absolute;
+            left: 50%;
+            top: calc(46% + 150px);
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeInUp 0.7s forwards;
+            animation-delay: 3.6s;
+            border: 1px solid #10b981;
+            cursor: pointer;
+            background: transparent;
+            color: #10b981;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 0.8rem 3rem;
+            border-radius: 0;
+            font-size: 0.95rem;
+            transition: background 0.2s ease, color 0.2s ease;
+            z-index: 2;
+        }
+        .btn-comenzar:hover {
+            background: #10b981;
+            color: #020617;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(24px); }
+            to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* ===== Header Logo Video (multiply + center crop, reduced) ===== */
+        .logo-video {
+            height: 54px;
+            width: auto;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+        }
+
+        /* YouTube en popup: 16:9 limpio, ancho máximo sin rebasar pantalla */
+        .yt-wrap {
+            width: min(90vw, calc(94vh * 16 / 9));
+            aspect-ratio: 16 / 9;
+            margin: 0 auto;
+        }
+        .yt-wrap iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+            border-radius: 4px;
+        }
+        /* ===== Instagram popup: recorte exacto del header/footer de IG ===== */
+        /* Contenedor del item: multimedia recortada + pie "Ver más en Instagram" */
+        .ig-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        /* Rie del item: línea "Ver más en Instagram" (estilo IG) */
+        .ig-foot {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            height: 46px;
+            margin-top: 10px;
+            background: #ffffff;
+            color: #00376b;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color .15s ease;
+        }
+        .ig-foot:hover {
+            background: #f0f0f0;
+        }
+        /* Posts de imagen (1:1 cuadrados): contenedor ajustado exacto a la multimedia,
+           sin franja blanca, ampliado al máximo alto de pantalla */
+        .ig-embed-wrap {
+            position: relative;
+            width: min(94vh, 94vw);
+            height: auto;
+            max-width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            margin: 0 auto;
+            border-radius: 4px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+        }
+        .ig-embed-wrap iframe {
+            position: absolute;
+            top: -54px; /* recorta el header de IG */
+            left: 0;
+            width: 100% !important;
+            height: calc(100% + 140px) !important; /* recorta el pie blanco (botones/comentarios) */
+            border: 0;
+            display: block;
+        }
+        /* Reels (9:16): contenedor ajustado exacto al video, sin franja blanca,
+           ampliado al máximo alto de pantalla */
+        .ig-embed-wrap.vertical {
+            position: relative;
+            width: min(calc(94vh * 9 / 16), 94vw);
+            height: auto;
+            max-width: 100%;
+            aspect-ratio: 9 / 16;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        /* Reels horizontales (16:9): contenedor ancho, recorte solo de la UI de IG */
+        .ig-embed-wrap.horizontal {
+            position: relative;
+            width: min(calc(94vh * 16 / 9), 94vw);
+            height: auto;
+            max-width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            margin: 0 auto;
+            border-radius: 4px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+        }
+        .ig-embed-wrap.vertical iframe {
+            position: absolute;
+            top: -54px; /* recorta el header de IG */
+            left: 0;
+            width: 100% !important;
+            height: calc(100% + 140px) !important; /* recorta el pie blanco (botones/comentarios) */
+            border: 0;
+            display: block;
+        }
+        /* Foto en el popup: imagen directa, limpia, sin marco de Instagram */
+        .ig-photo {
+            width: 100%;
+            max-width: 540px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ig-photo img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.4);
+            display: block;
+        }
+        /* ===== Navegación de galería (flechas a los lados) ===== */
+        .ig-gallery-label {
+            text-align: center;
+            color: #cbd5e1;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            letter-spacing: 0.02em;
+        }
+        .ig-row {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            width: 100%;
+        }
+        .ig-center {
+            flex: 1 1 0;
+            min-width: 0;
+            width: auto;
+            max-width: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ig-arrow {
+            flex: 0 0 auto;
+            position: relative;
+            z-index: 10;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #1e293b;
+            color: #e2e8f0;
+            border: 1px solid rgba(16,185,129,0.4);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all .2s;
+        }
+        .ig-arrow:hover:not(:disabled) {
+            background: #10b981;
+            color: #020617;
+        }
+        .ig-arrow:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+        /* Botón "Ver en Instagram" (solo ícono) bajo la media */
+        .ig-open {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
+            margin: 18px auto 0;
+            border-radius: 50%;
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.35);
+            font-size: 1.35rem;
+            cursor: pointer;
+            transition: all .2s;
+        }
+        .ig-open:hover {
+            background: #10b981;
+            border-color: #10b981;
+            color: #020617;
+        }
+        @media (max-width: 480px) {
+            .ig-open { width: 40px; height: 40px; font-size: 1.2rem; }
+        }
+        @media (max-width: 480px) {
+            .ig-row { gap: 6px; }
+            .ig-arrow { width: 38px; height: 38px; }
+        }
+
+        /* ===== Tarjetas SIN redondez + botones minimalistas ===== */
+        .portfolio-card {
+            border-radius: 0 !important;
+        }
+        .portfolio-card .aspect-video,
+        .portfolio-card .rounded-xl,
+        .portfolio-card .rounded-lg,
+        .portfolio-card .rounded {
+            border-radius: 0 !important;
+        }
+        .portfolio-card .portfolio-media {
+            border-radius: 0 !important;
+        }
+        .portfolio-card button {
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            letter-spacing: 0.03em;
+        }
+        .portfolio-media img {
+            display: block;
+        }
+        .portfolio-media.media-missing {
+            background-color: rgba(15, 23, 42, 0.6);
+        }
+
+        /* ===== Modal responsivo: no rebasa la pantalla ===== */
+        #media-modal {
+            overflow-y: auto;
+            overflow-x: hidden;
+            touch-action: pan-y;
+        }
+        #media-modal #modal-body iframe {
+            max-width: 100%;
+            display: block;
+        }
+        #media-modal #modal-body {
+            overflow: auto;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 3vh 16px 3vh;
+        }
+        /* Centrado con margin:auto para que nunca se corte por arriba al hacer scroll */
+        #media-modal #modal-body > * {
+            margin: auto;
+        }
+        #media-modal #modal-body .aspect-video,
+        #media-modal #modal-body .w-full.h-\[450px\] {
+            margin: auto;
+        }
+
+        /* ===== Cabecera: imagen Header, opacidad 25%, funde abajo a 0% transparencia ===== */
+        .header-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-image: linear-gradient(to bottom, rgba(8,12,16,0.75) 0%, rgba(8,12,16,0.85) 55%, rgba(8,12,16,1) 100%), url('Header.jpg');
+            background-size: cover;
+            background-position: center top;
+            pointer-events: none;
+        }
+
+        /* ===== Tarjeta intro: Header.jpg con gradiente a negro a la derecha e iluminación oscura ===== */
+        .hero-intro-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                linear-gradient(to right,
+                    rgba(8,12,16,0.55) 0%,
+                    rgba(8,12,16,0.72) 40%,
+                    rgba(8,12,16,0.95) 80%,
+                    rgba(8,12,16,1) 100%),
+                url('Header.jpg');
+            background-size: cover;
+            background-position: center;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen flex flex-col justify-between">
+
+    <!-- Fullscreen Intro Overlay with GIF + Animated "PORTAFOLIO" + Comenzar -->
+    <div id="intro-overlay">
+        <div class="intro-gif"></div>
+        <div class="intro-portafolio">
+            <span class="ch" style="animation-delay:0.1s">P</span><span class="ch" style="animation-delay:0.16s">O</span><span class="ch" style="animation-delay:0.22s">R</span><span class="ch" style="animation-delay:0.28s">T</span><span class="ch" style="animation-delay:0.34s">A</span><br>
+            <span class="ch" style="animation-delay:0.46s">F</span><span class="ch" style="animation-delay:0.52s">O</span><span class="ch" style="animation-delay:0.58s">L</span><span class="ch" style="animation-delay:0.64s">I</span><span class="ch" style="animation-delay:0.7s">O</span>
+        </div>
+        <button class="btn-comenzar" onclick="hideIntro()">
+            <i class="fas fa-play mr-2"></i> Comenzar
+        </button>
+    </div>
+
+    <!-- Background Image Overlay Fade -->
+    <div class="hero-bg-left"></div>
+
+    <!-- Header / Navbar -->
+    <header class="relative z-20 bg-white/5 backdrop-blur-[1px] border-b border-black sticky top-0 overflow-hidden">
+        <div class="header-bg"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <!-- Header Logo: imagen de logo en lugar del video -->
+                <img id="logo-intro" src="suburbio_logo_white_diag.png" alt="Suburbio Estudios Logo" class="logo-video shrink-0">
+                <div class="pl-2">
+                    <span class="font-heading text-xl text-white tracking-wider">Suburbio<span class="text-emerald-400">Estudios</span></span>
+                    <span class="block text-xs text-slate-400 font-medium tracking-widest">Aliado Creativo & Musical</span>
+                </div>
+            </div>
+
+            <!-- Social Quick Links in Header -->
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="https://youtube.com/@suburbioestudios?sub_confirmation=1" target="_blank" rel="noopener" class="text-slate-400 hover:text-red-500 transition-colors text-lg" title="YouTube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="https://www.instagram.com/suburbioestudios/" target="_blank" rel="noopener" class="text-slate-400 hover:text-pink-500 transition-colors text-lg" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://open.spotify.com/playlist/429EeDbt4FGuXLsdViczQH" target="_blank" rel="noopener" class="text-slate-400 hover:text-emerald-400 transition-colors text-lg" title="Spotify">
+                    <i class="fab fa-spotify"></i>
+                </a>
+                <a href="https://suburbioestudios.wixsite.com/hagamosmusica" target="_blank" rel="noopener" class="text-slate-400 hover:text-cyan-400 transition-colors text-lg" title="Website">
+                    <i class="fas fa-globe"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16">
+        
+        <!-- Hero Introduction Block -->
+        <section class="mb-14 relative">
+            <div class="glass-card rounded-none p-6 md:p-10 relative overflow-hidden">
+                <div class="hero-intro-bg"></div>
+                <div class="relative z-10 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                    <div>
+                        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-5">
+                            <i class="fas fa-compact-disc animate-spin text-xs" style="animation-duration: 6s;"></i>
+                            <span>Portafolio Profesional</span>
+                        </div>
+                        <h1 class="hero-title text-white tracking-tight leading-none">
+                            <span class="block font-light text-2xl sm:text-3xl md:text-4xl text-slate-200">más que un CATÁLOGO</span>
+                            <span class="block text-4xl sm:text-5xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 glow-emerald mt-0 leading-none">freelance <span class="font-light text-white text-2xl sm:text-3xl md:text-4xl align-middle">un</span></span>
+                            <span class="block text-5xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 glow-emerald -mt-2 leading-none reservoir-g">aliado</span>
+                            <span class="block font-light text-white text-xl sm:text-2xl md:text-3xl -mt-1 leading-none">Musical Integrativo</span>
+                        </h1>
+                    </div>
+
+                    <div class="space-y-5">
+                        <p class="text-slate-200 text-base md:text-lg leading-relaxed font-light">
+                            Te presentamos este portafolio como una muestra de que cuentas con un aliado que entiende el universo del ecosistema musical: aplicaciones de <strong class="text-emerald-300 font-semibold">Diseño e Identidad Visual</strong> y colaboraciones con distintos productores de industrias culturales.
+                        </p>
+
+                        <div class="p-4 bg-slate-900/70 border border-slate-800 text-slate-300 text-sm md:text-base">
+                            <div class="flex items-center space-x-2 text-emerald-400 font-heading text-lg mb-1">
+                                <i class="fas fa-palette"></i>
+                                <span>Servicios Visuales</span>
+                            </div>
+                            <p class="text-slate-300">
+                                <strong>Diseño de marca:</strong> Logotipos 6v, perfiles e imprimibles. Marcas desarrolladas por completo, variantes de color y forma, manual de uso, estética profesional y alto impacto.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter Controls and Search -->
+        <section class="mb-8">
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 backdrop-blur-md">
+
+                <!-- Category Buttons (distribuidos uniformemente) -->
+                <div class="flex flex-wrap justify-center items-stretch gap-2 w-full" id="filter-buttons">
+                    <button onclick="filterGallery('all')" class="filter-btn active px-4 py-2 rounded-lg text-xs md:text-sm font-semibold bg-emerald-500 text-slate-950 shadow-md transition-all">
+                        <i class="fas fa-th-large mr-1.5"></i> Todos
+                    </button>
+                    <button onclick="filterGallery('branding')" class="filter-btn px-4 py-2 rounded-lg text-xs md:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-emerald-400 transition-all">
+                        <i class="fas fa-pen-nib mr-1.5"></i> Branding & Logos
+                    </button>
+                    <button onclick="filterGallery('covers')" class="filter-btn px-4 py-2 rounded-lg text-xs md:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-emerald-400 transition-all">
+                        <i class="fas fa-record-vinyl mr-1.5"></i> Covers & Álbumes
+                    </button>
+                    <button onclick="filterGallery('flyers')" class="filter-btn px-4 py-2 rounded-lg text-xs md:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-emerald-400 transition-all">
+                        <i class="fas fa-photo-video mr-1.5"></i> Flyers & Reels
+                    </button>
+                    <button onclick="filterGallery('video')" class="filter-btn px-4 py-2 rounded-lg text-xs md:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-emerald-400 transition-all">
+                        <i class="fas fa-film mr-1.5"></i> Video & Cine
+                    </button>
+                    <button onclick="filterGallery('spotify')" class="filter-btn px-4 py-2 rounded-lg text-xs md:text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-emerald-400 transition-all">
+                        <i class="fab fa-spotify mr-1.5"></i> Sello & Spotify
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALLERY GRID (3 COLUMNS MANDATORY) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="portfolio-grid">
+
+            <!-- Item 1: Logo Artista / Banda (Instagram Collection) -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="branding" data-title="Logo artista banda identidad de marca logotipos">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                            <i class="fab fa-instagram mr-1"></i> Instagram
+                        </span>
+                        <span class="text-xs text-slate-400"><i class="fas fa-layer-group mr-1"></i> 7 Versiones</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">Logo Artista / Banda</h3>
+                    <p class="text-slate-400 text-xs mb-4">Diseño integral de logotipos, isotipos y variaciones de marca para proyectos musicales de alto impacto.</p>
+                    
+                    <!-- Preview Visual Card (links to the post; image -> publication) -->
+                    <button onclick="openGallery(['Bm6DeWKH8Tp','CNQncm-gK8C','Bm6DTXUn4mt','BZzzA4aggjI','BZvjps7g4Ce','BklGcsRnDnl','Bm6EAVRH0GQ'],0,'Logo Artista / Banda')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-ig="Bm6DeWKH8Tp" alt="Logo Artista / Banda" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80">
+                    <div class="text-xs text-slate-400 mb-2 font-medium">Previsualizar publicaciones:</div>
+                    <div class="flex flex-wrap gap-1.5">
+                        <button onclick="openGallery(['Bm6DeWKH8Tp','CNQncm-gK8C','Bm6DTXUn4mt','BZzzA4aggjI','BZvjps7g4Ce','BklGcsRnDnl','Bm6EAVRH0GQ'],0,'Logo Artista / Banda')" class="px-2 py-1 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-slate-300 hover:text-white transition-colors cursor-pointer">V1</button>
+                        <button onclick="openGallery(['Bm6DeWKH8Tp','CNQncm-gK8C','Bm6DTXUn4mt','BZzzA4aggjI','BZvjps7g4Ce','BklGcsRnDnl','Bm6EAVRH0GQ'],1,'Logo Artista / Banda')" class="px-2 py-1 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-slate-300 hover:text-white transition-colors cursor-pointer">V2</button>
+                        <button onclick="openGallery(['Bm6DeWKH8Tp','CNQncm-gK8C','Bm6DTXUn4mt','BZzzA4aggjI','BZvjps7g4Ce','BklGcsRnDnl','Bm6EAVRH0GQ'],2,'Logo Artista / Banda')" class="px-2 py-1 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-slate-300 hover:text-white transition-colors cursor-pointer">V3</button>
+                        <button onclick="openGallery(['Bm6DeWKH8Tp','CNQncm-gK8C','Bm6DTXUn4mt','BZzzA4aggjI','BZvjps7g4Ce','BklGcsRnDnl','Bm6EAVRH0GQ'],3,'Logo Artista / Banda')" class="px-2 py-1 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-slate-300 hover:text-white transition-colors cursor-pointer">V4</button>
+                        <button onclick="openGallery(['Bm6DeWKH8Tp','CNQncm-gK8C','Bm6DTXUn4mt','BZzzA4aggjI','BZvjps7g4Ce','BklGcsRnDnl','Bm6EAVRH0GQ'],4,'Logo Artista / Banda')" class="px-2 py-1 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-slate-300 hover:text-white transition-colors cursor-pointer">V5</button>
+                        <button onclick="openGallery(['Bm6DeWKH8Tp','CNQncm-gK8C','Bm6DTXUn4mt','BZzzA4aggjI','BZvjps7g4Ce','BklGcsRnDnl','Bm6EAVRH0GQ'],5,'Logo Artista / Banda')" class="px-2 py-1 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-slate-300 hover:text-white transition-colors cursor-pointer">V6</button>
+                        <button onclick="openGallery(['Bm6DeWKH8Tp','CNQncm-gK8C','Bm6DTXUn4mt','BZzzA4aggjI','BZvjps7g4Ce','BklGcsRnDnl','Bm6EAVRH0GQ'],6,'Logo Artista / Banda')" class="px-2 py-1 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-slate-300 hover:text-white transition-colors cursor-pointer">V7</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2: Logo sello + proceso -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="branding" data-title="Logo tipo sello proceso discografica brand identity">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                            <i class="fab fa-instagram mr-1"></i> Instagram
+                        </span>
+                        <span class="text-xs text-emerald-400"><i class="fas fa-check-circle mr-1"></i> Proceso Completo</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">Logo Tipo Sello + Proceso</h3>
+                    <p class="text-slate-400 text-xs mb-4">Desarrollo de marca discográfica desde bocetos iniciales hasta manual de uso.</p>
+                    
+                    <button onclick="openModal('instagram','C_cCt2lsguS','Logo Tipo Sello + Proceso')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-ig="C_cCt2lsguS" alt="Logo Tipo Sello + Proceso" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80">
+                    <button onclick="openModal('instagram','C_cCt2lsguS','Logo Tipo Sello + Proceso')" class="w-full py-2 px-3 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-200 hover:text-white text-xs flex items-center justify-center transition-all cursor-pointer">
+                        <span>Previsualizar Proceso en Instagram</span>
+                        <i class="fas fa-eye ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Item 5: Diseño de Album -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="covers" data-title="Diseno de Album discografia concepto grafico arte covers sencillos portada">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                            <i class="fab fa-instagram mr-1"></i> Instagram
+                        </span>
+                        <span class="text-xs text-emerald-400"><i class="fas fa-compact-disc mr-1"></i> Álbumes & Covers</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">Diseño de Álbum</h3>
+                    <p class="text-slate-400 text-xs mb-4">Dirección de arte gráfica integral para producciones discográficas de larga duración y arte de portada para sencillos.</p>
+                    
+                    <button onclick="openGallery(['BajNxdMAgSC','Bu4c6CaAx9a','BZvjnU0g-gp','CUWUgmtgavj','CATNPN8AYAm'],0,'Diseño de Álbum')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-ig="BajNxdMAgSC" alt="Diseño de Álbum" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80 flex gap-2">
+                    <button onclick="openGallery(['BajNxdMAgSC','Bu4c6CaAx9a','BZvjnU0g-gp','CUWUgmtgavj','CATNPN8AYAm'],0,'Diseño de Álbum')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Álbum 1</button>
+                    <button onclick="openGallery(['BajNxdMAgSC','Bu4c6CaAx9a','BZvjnU0g-gp','CUWUgmtgavj','CATNPN8AYAm'],1,'Diseño de Álbum')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Álbum 2</button>
+                    <button onclick="openGallery(['BajNxdMAgSC','Bu4c6CaAx9a','BZvjnU0g-gp','CUWUgmtgavj','CATNPN8AYAm'],2,'Diseño de Álbum')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Álbum 3</button>
+                    <button onclick="openGallery(['BajNxdMAgSC','Bu4c6CaAx9a','BZvjnU0g-gp','CUWUgmtgavj','CATNPN8AYAm'],3,'Diseño de Álbum')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Cover 1</button>
+                    <button onclick="openGallery(['BajNxdMAgSC','Bu4c6CaAx9a','BZvjnU0g-gp','CUWUgmtgavj','CATNPN8AYAm'],4,'Diseño de Álbum')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Cover 2</button>
+                </div>
+            </div>
+
+            <!-- Item 6: Proyecto UNAJ - Haciendo Rap Juntxs -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="covers" data-title="Haciendo rap juntxs universidad nacional arturo jauretche unaj album singles">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                            <i class="fas fa-university mr-1"></i> Proyecto UNAJ
+                        </span>
+                        <span class="text-xs text-slate-400">Cultural & Social</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">"Haciendo Rap Juntxs"</h3>
+                    <p class="text-slate-400 text-xs mb-4">Diseño de álbum y singles para el proyecto impulsado por la Universidad Nacional Arturo Jauretche.</p>
+                    
+                    <button onclick="openGallery(['C9g5pCkONHz','C9g14LhODdm','C9g45S7uftb'],0,'Haciendo Rap Juntxs')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-ig="C9g5pCkONHz" alt="Haciendo Rap Juntxs" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80 flex gap-2">
+                    <button onclick="openGallery(['C9g5pCkONHz','C9g14LhODdm','C9g45S7uftb'],0,'Haciendo Rap Juntxs')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-cyan-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Part 1</button>
+                    <button onclick="openGallery(['C9g5pCkONHz','C9g14LhODdm','C9g45S7uftb'],1,'Haciendo Rap Juntxs')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-cyan-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Part 2</button>
+                    <button onclick="openGallery(['C9g5pCkONHz','C9g14LhODdm','C9g45S7uftb'],2,'Haciendo Rap Juntxs')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-cyan-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Part 3</button>
+                </div>
+            </div>
+
+            <!-- Item 7: Diseño de Flyers -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="flyers" data-title="Diseno de flyers eventos afiches carteleria shows instagram">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                            <i class="fab fa-instagram mr-1"></i> Instagram
+                        </span>
+                        <span class="text-xs text-slate-400"><i class="fas fa-calendar-alt mr-1"></i> Eventos</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">Diseño de Flyers</h3>
+                    <p class="text-slate-400 text-xs mb-4">Afiches promocionales para recitales, festivales y convocatorias en vivo.</p>
+                    
+                    <button onclick="openGallery(['ClC1_TwuioO','BhVB2_wB_-_','C8nrY4Ms6B8'],0,'Diseño de Flyers')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-ig="ClC1_TwuioO" alt="Diseño de Flyers" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80 flex gap-2">
+                    <button onclick="openGallery(['ClC1_TwuioO','BhVB2_wB_-_','C8nrY4Ms6B8'],0,'Diseño de Flyers')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-amber-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Flyer 1</button>
+                    <button onclick="openGallery(['ClC1_TwuioO','BhVB2_wB_-_','C8nrY4Ms6B8'],1,'Diseño de Flyers')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-amber-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Flyer 2</button>
+                    <button onclick="openGallery(['ClC1_TwuioO','BhVB2_wB_-_','C8nrY4Ms6B8'],2,'Diseño de Flyers')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-amber-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Flyer 3</button>
+                </div>
+            </div>
+
+            <!-- Item 8: Flyers Animados -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="flyers video" data-title="Flyers animados motion graphics youtube shorts instagram">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            <i class="fas fa-play mr-1"></i> Motion Visual
+                        </span>
+                        <span class="text-xs text-slate-400">IG & YouTube Shorts</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">Flyers Animados</h3>
+                    <p class="text-slate-400 text-xs mb-4">Piezas gráficas animadas con ritmo y movimiento para capturar la atención en feed.</p>
+                    
+                    <button onclick="openGallery(['DC5C_1XRWFh','Dc4Ned4yYfp','CkcX0gzD7Mt'],0,'Flyers Animados')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-ig="DC5C_1XRWFh" alt="Flyers Animados" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80 flex flex-col gap-2">
+                    <div class="flex gap-2">
+                        <button onclick="openGallery(['DC5C_1XRWFh','Dc4Ned4yYfp','CkcX0gzD7Mt'],0,'Flyers Animados')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-pink-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer"><i class="fab fa-instagram"></i> Animado 1</button>
+                        <button onclick="openGallery(['DC5C_1XRWFh','Dc4Ned4yYfp','CkcX0gzD7Mt'],1,'Flyers Animados')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-pink-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer"><i class="fab fa-instagram"></i> Animado 2</button>
+                        <button onclick="openGallery(['DC5C_1XRWFh','Dc4Ned4yYfp','CkcX0gzD7Mt'],2,'Flyers Animados')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-pink-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer"><i class="fab fa-instagram"></i> Animado 3</button>
+                    </div>
+                    <button onclick="openModal('youtube', '28XdBXC1apc', 'Flyer Animado - YT Shorts')" class="w-full py-1.5 px-2 rounded bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white text-[11px] text-center font-medium transition-all flex items-center justify-center">
+                        <i class="fab fa-youtube mr-1.5"></i> Ver YT Short en Modal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Item 9: Reels Plantillas de Lanzamiento -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="flyers video" data-title="Reels plantillas de lanzamientos promo singles drops">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                            <i class="fas fa-cubes mr-1"></i> Plantillas
+                        </span>
+                        <span class="text-xs text-amber-400"><i class="fas fa-star mr-1"></i> Reels Promo</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">Reels Plantillas de Lanzamiento</h3>
+                    <p class="text-slate-400 text-xs mb-4">Sistemas de plantillas dinámicas y editables para promocionar nuevos singles y álbumes, incluyendo el reel de presentación de la marca Blin Blin.</p>
+                    
+                    <button onclick="openGallery(['C_cDULXu5cu','DM7Ut6AuYSl','DH_86nJheRe'],0,'Reels Plantillas de Lanzamiento')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-ig="C_cDULXu5cu" alt="Reels Plantillas de Lanzamiento" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80 flex gap-2">
+                    <button onclick="openGallery(['C_cDULXu5cu','DM7Ut6AuYSl','DH_86nJheRe'],0,'Reels Plantillas de Lanzamiento')" class="flex-1 py-2 px-3 rounded-lg bg-slate-800 hover:bg-purple-600 text-slate-200 hover:text-white text-xs text-center transition-all cursor-pointer">Plantilla 1</button>
+                    <button onclick="openGallery(['C_cDULXu5cu','DM7Ut6AuYSl','DH_86nJheRe'],1,'Reels Plantillas de Lanzamiento')" class="flex-1 py-2 px-3 rounded-lg bg-slate-800 hover:bg-purple-600 text-slate-200 hover:text-white text-xs text-center transition-all cursor-pointer">Plantilla 2</button>
+                    <button onclick="openGallery(['C_cDULXu5cu','DM7Ut6AuYSl','DH_86nJheRe'],2,'Reels Plantillas de Lanzamiento')" class="flex-1 py-2 px-3 rounded-lg bg-slate-800 hover:bg-purple-600 text-slate-200 hover:text-white text-xs text-center transition-all cursor-pointer">Reel Marca Blin Blin</button>
+                </div>
+            </div>
+
+            <!-- Item 10: Campaña lanzamientos -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="flyers branding" data-title="Campana lanzamientos estrategia de contenido promocion musical">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            <i class="fas fa-bullhorn mr-1"></i> Campañas
+                        </span>
+                        <span class="text-xs text-emerald-400">Estrategia Global</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">Campaña de Lanzamientos</h3>
+                    <p class="text-slate-400 text-xs mb-4">Ecosistema visual completo: teasers, artes de tapa y piezas para redes sincronizadas.</p>
+                    
+                    <button onclick="openGallery(['CUWRGkmAoLi','CUWUgmtgavj','CUWTJLhAW4B'],0,'Campaña de Lanzamientos')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-ig="CUWRGkmAoLi" alt="Campaña de Lanzamientos" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80 flex gap-2">
+                    <button onclick="openGallery(['CUWRGkmAoLi','CUWUgmtgavj','CUWTJLhAW4B'],0,'Campaña de Lanzamientos')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Teaser</button>
+                    <button onclick="openGallery(['CUWRGkmAoLi','CUWUgmtgavj','CUWTJLhAW4B'],1,'Campaña de Lanzamientos')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Arte</button>
+                    <button onclick="openGallery(['CUWRGkmAoLi','CUWUgmtgavj','CUWTJLhAW4B'],2,'Campaña de Lanzamientos')" class="flex-1 py-1.5 px-2 rounded bg-slate-800 hover:bg-emerald-600 text-[11px] text-center text-slate-300 hover:text-white transition-all cursor-pointer">Promo</button>
+                </div>
+            </div>
+
+            <!-- Item 11: Reels registro eventos -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="video" data-title="Reels registro eventos cobertura recitals shows musica en vivo">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                            <i class="fab fa-instagram mr-1"></i> Cobertura
+                        </span>
+                        <span class="text-xs text-slate-400">Registro En Vivo</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">Reels Registro de Eventos</h3>
+                    <p class="text-slate-400 text-xs mb-4">Captura dinámica de shows en vivo, festivales y momentos detrás de escena.</p>
+                    
+                    <button onclick="openGallery(['BpIgz5RFXOh','DNHSFR1PTXA'],0,'Reels Registro de Eventos')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-ig="BpIgz5RFXOh" alt="Reels Registro de Eventos" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80 flex gap-2">
+                    <button onclick="openGallery(['BpIgz5RFXOh','DNHSFR1PTXA'],0,'Reels Registro de Eventos')" class="flex-1 py-2 px-3 rounded-lg bg-slate-800 hover:bg-pink-600 text-slate-200 hover:text-white text-xs text-center transition-all cursor-pointer">Registro #1</button>
+                    <button onclick="openGallery(['BpIgz5RFXOh','DNHSFR1PTXA'],1,'Reels Registro de Eventos')" class="flex-1 py-2 px-3 rounded-lg bg-slate-800 hover:bg-pink-600 text-slate-200 hover:text-white text-xs text-center transition-all cursor-pointer">Registro #2</button>
+                </div>
+            </div>
+
+            <!-- Item 12: Dirección Video estilo Cine -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="video" data-title="Direccion video cine orquesta sinfonica juvenil beca sostener cultura fondo nacional de las artes fnartes youtube">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20">
+                            <i class="fab fa-youtube mr-1"></i> YouTube / Cine
+                        </span>
+                        <span class="text-xs text-amber-400"><i class="fas fa-award mr-1"></i> Becados FNA</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">Dirección Video Estilo Cine</h3>
+                    <p class="text-slate-400 text-xs mb-4">Orquesta Sinfónica Juvenil & Ganadores "BECA Sostener Cultura" Fondo Nacional de las Artes.</p>
+                    
+                    <button onclick="openModal('youtube', 'N9qrgpiOn-k', 'Orquesta Sinfónica Juvenil - Dirección Cine')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-yt="N9qrgpiOn-k" alt="Orquesta Sinfónica Juvenil - Dirección Cine" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/50">
+                            <i class="fab fa-youtube text-5xl text-red-500"></i>
+                        </span>
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80 flex flex-col gap-2">
+                    <button onclick="openModal('youtube', 'N9qrgpiOn-k', 'Orquesta Sinfónica Juvenil - Dirección Cine')" class="w-full py-2 px-3 rounded-lg bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white text-xs font-medium transition-all flex items-center justify-center">
+                        <i class="fab fa-youtube mr-2"></i> Reproducir: Orquesta Sinfónica
+                    </button>
+                    <button onclick="openModal('youtube', 'VXmX51KHwBE', 'Ganadores Beca Sostener Cultura - FNA')" class="w-full py-2 px-3 rounded-lg bg-amber-600/20 hover:bg-amber-600 text-amber-300 hover:text-white text-xs font-medium transition-all flex items-center justify-center">
+                        <i class="fas fa-award mr-2"></i> Reproducir: Beca FNA
+                    </button>
+                </div>
+            </div>
+
+            <!-- Item 13: Videos Lyrics -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="video" data-title="Videos lyrics letras animadas video musical youtube">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20">
+                            <i class="fab fa-youtube mr-1"></i> YouTube
+                        </span>
+                        <span class="text-xs text-slate-400">Lyric Video</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">Videos Lyrics</h3>
+                    <p class="text-slate-400 text-xs mb-4">Diseño tipográfico sincronizado y animaciones visuales para acompañar letras oficiales.</p>
+                    
+                    <button onclick="openModal('youtube', '-4CBywnqBaA', 'Video Lyric Oficial')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-yt="-4CBywnqBaA" alt="Video Lyric Oficial" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/50">
+                            <i class="fab fa-youtube text-5xl text-red-500"></i>
+                        </span>
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80 flex gap-2">
+                    <button onclick="openModal('youtube', '-4CBywnqBaA', 'Video Lyric Oficial')" class="flex-1 py-2 px-4 rounded-lg bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white font-medium text-xs flex items-center justify-center transition-all">
+                        <i class="fab fa-youtube mr-2"></i> Lyric Oficial
+                    </button>
+                    <button onclick="openModal('youtube', 'pOJ83VTFYf4', 'Video Lyric Animado')" class="flex-1 py-2 px-4 rounded-lg bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white font-medium text-xs flex items-center justify-center transition-all">
+                        <i class="fab fa-youtube mr-2"></i> Lyric 2
+                    </button>
+                </div>
+            </div>
+
+            <!-- Item 14: Reel Marketing -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="flyers branding" data-title="Reel marketing estrategia comunicacion contenidos ig">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                            <i class="fab fa-instagram mr-1"></i> Instagram
+                        </span>
+                        <span class="text-xs text-emerald-400">Estrategia</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">Reel Marketing</h3>
+                    <p class="text-slate-400 text-xs mb-4">Piezas audiovisuales orientadas al posicionamiento y conversión en la industria musical.</p>
+                    
+                    <button onclick="openModal('instagram','DSs8EcJjqJh','Reel Marketing')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-ig="DSs8EcJjqJh" alt="Reel Marketing" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80">
+                    <button onclick="openModal('instagram','DSs8EcJjqJh','Reel Marketing')" class="w-full py-2 px-3 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-200 hover:text-white text-xs flex items-center justify-center transition-all cursor-pointer">
+                        <span>Previsualizar Reel Marketing en IG</span>
+                        <i class="fas fa-eye ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Item 15: CATÁLOGO SELLO (Spotify Playlist) -->
+            <div class="portfolio-card glass-card rounded-xl overflow-hidden flex flex-col justify-between" data-category="spotify" data-title="Catalogo sello discografico spotify playlist reproduccion lanzamientos">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            <i class="fab fa-spotify mr-1"></i> Spotify Official
+                        </span>
+                        <span class="text-xs text-slate-400"><i class="fas fa-list-music mr-1"></i> Playlist</span>
+                    </div>
+                    <h3 class="card-title text-base text-white mb-2">Catálogo del Sello</h3>
+                    <p class="text-slate-400 text-xs mb-4">Playlist oficial con el catálogo de producciones, lanzamientos y colaboraciones discográficas.</p>
+                    
+                    <button onclick="openModal('spotify', '429EeDbt4FGuXLsdViczQH', 'Catálogo Sello - Spotify Playlist')" class="portfolio-media block relative w-full aspect-video bg-slate-900 overflow-hidden group text-left cursor-pointer" style="padding:0;border:none;font:inherit;">
+                        <img data-sp="https://open.spotify.com/playlist/429EeDbt4FGuXLsdViczQH" alt="Catálogo del Sello - Spotify" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/50">
+                            <i class="fab fa-spotify text-5xl text-emerald-400"></i>
+                        </span>
+                    </button>
+                </div>
+
+                <div class="p-4 bg-slate-950/60 border-t border-slate-800/80 flex flex-col gap-2">
+                    <button onclick="openModal('spotify', '429EeDbt4FGuXLsdViczQH', 'Catálogo Sello - Spotify Playlist')" class="w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all flex items-center justify-center">
+                        <i class="fas fa-play-circle mr-2"></i> Escuchar Playlist Interactiva
+                    </button>
+                    <a href="https://open.spotify.com/playlist/429EeDbt4FGuXLsdViczQH" target="_blank" class="text-center text-[11px] text-slate-400 hover:text-emerald-300">Abrir directamente en Spotify <i class="fas fa-external-link-alt ml-1"></i></a>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- BANNER PAUTA (arriba de los contactos) -->
+        <section class="relative z-10 mt-16">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center">
+                <div class="w-full overflow-hidden rounded-2xl border border-emerald-500/30 shadow-xl shadow-emerald-900/20">
+                    <img src="Banner pauta.gif" alt="Pauta Suburbio Estudios" class="w-full h-auto block">
+                </div>
+            </div>
+        </section>
+
+        <!-- Links a Redes Banner Section -->
+        <section class="mt-16">
+            <div class="glass-card rounded-2xl p-6 md:p-8 border border-emerald-500/30 text-center relative overflow-hidden">
+                <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <h2 class="font-heading text-2xl md:text-3xl text-white mb-3">Conectemos y hagamos música</h2>
+                <p class="text-slate-300 text-sm md:text-base max-w-xl mx-auto mb-6">
+                    Explora nuestros canales oficiales y ponte en contacto con nuestro equipo para tu próximo proyecto.
+                </p>
+
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="https://youtube.com/@suburbioestudios?sub_confirmation=1" target="_blank" rel="noopener" class="btn-neon px-5 py-3 rounded-xl font-bold text-slate-950 text-sm flex items-center space-x-2">
+                        <i class="fab fa-youtube text-lg"></i>
+                        <span>Suscribirse a YouTube</span>
+                    </a>
+                    <a href="https://www.instagram.com/suburbioestudios/" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 font-bold text-white text-sm hover:opacity-90 transition-opacity flex items-center space-x-2 shadow-lg shadow-pink-500/20">
+                        <i class="fab fa-instagram text-lg"></i>
+                        <span>@suburbioestudios</span>
+                    </a>
+                    <a href="https://suburbioestudios.wixsite.com/hagamosmusica" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 font-bold text-cyan-300 text-sm border border-cyan-500/30 transition-all flex items-center space-x-2">
+                        <i class="fas fa-globe text-lg"></i>
+                        <span>Sitio Web Oficial</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="relative z-20 bg-black border-t border-slate-800 pt-8 pb-4 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+                <p class="text-sm text-white font-heading">Suburbio Estudios</p>
+                <p class="text-xs text-slate-400">Identidad Visual & Producción para la Industria Cultural</p>
+            </div>
+            
+            <div class="flex items-center space-x-6 text-slate-400 text-lg">
+                <a href="https://youtube.com/@suburbioestudios?sub_confirmation=1" target="_blank" class="hover:text-red-500 transition-colors"><i class="fab fa-youtube"></i></a>
+                <a href="https://suburbioestudios.wixsite.com/hagamosmusica" target="_blank" class="hover:text-cyan-400 transition-colors"><i class="fas fa-globe"></i></a>
+                <a href="https://www.instagram.com/suburbioestudios/" target="_blank" class="hover:text-pink-500 transition-colors"><i class="fab fa-instagram"></i></a>
+                <a href="https://open.spotify.com/playlist/429EeDbt4FGuXLsdViczQH" target="_blank" class="hover:text-emerald-400 transition-colors"><i class="fab fa-spotify"></i></a>
+            </div>
+        </div>
+
+        <div class="text-center text-[11px] text-slate-400 mt-6">
+            © Suburbio Estudios. Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE LIGHTBOX MODAL (sin contenedor, a pantalla completa) -->
+    <div id="media-modal" class="fixed inset-0 z-50 hidden bg-black">
+        <button onclick="closeModal()" title="Cerrar" class="absolute top-4 right-4 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white text-2xl transition-colors">
+            <i class="fas fa-times"></i>
+        </button>
+        <!-- Modal Body / Frame: ocupa toda la pantalla -->
+        <div id="modal-body" class="w-full h-full flex items-center justify-center p-6 sm:p-10 overflow-auto">
+            <!-- Dynamic content generated via Javascript -->
+        </div>
+    </div>
+
+    <!-- JavaScript Interactions -->
+    <script>
+        
+        // Filter function for category buttons
+        function filterGallery(category) {
+            const cards = document.querySelectorAll('.portfolio-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-emerald-500', 'text-slate-950', 'active');
+                btn.classList.add('bg-slate-800', 'text-slate-300');
+            });
+
+            event.currentTarget.classList.remove('bg-slate-800', 'text-slate-300');
+            event.currentTarget.classList.add('bg-emerald-500', 'text-slate-950', 'active');
+
+            cards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                if (category === 'all' || cardCategory.includes(category)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Modal Lightbox Opener
+        function openModal(type, id, title) {
+            if (type === 'spotify') {
+                window.open('https://open.spotify.com/playlist/' + id, '_blank');
+                return;
+            }
+
+            const modal = document.getElementById('media-modal');
+            const modalBody = document.getElementById('modal-body');
+
+            modalBody.innerHTML = '';
+
+            if (type === 'youtube') {
+                modalBody.innerHTML = ytFrame(id, title);
+            }
+            if (type === 'instagram') {
+                modalBody.innerHTML = igFrame(id);
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        // Iframe de YouTube dentro del popup (16:9 limpio, con autoplay silenciado para evitar el bloqueo)
+        function ytFrame(id, title) {
+            return '<div class="yt-wrap">' +
+                '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&mute=1&playsinline=1" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="' + (title || 'Video YouTube') + '"></iframe>' +
+                '</div>';
+        }
+
+        // ===== Galería dentro de una tarjeta (solo imagen + flechas) =====
+
+        // Códigos de REELS (video vertical por defecto; las fotos se muestran como imagen limpia)
+        var REEL_CODES = ['DH_86nJheRe','DC5C_1XRWFh','CkcX0gzD7Mt','C_cDULXu5cu','DM7Ut6AuYSl','BpIgz5RFXOh','DNHSFR1PTXA','DSs8EcJjqJh','Dc4Ned4yYfp'];
+
+        // Excepciones de orientación/aspecto dentro del popup
+        var SQUARE_REEL_CODES = ['C_cDULXu5cu'];          // se ve cuadrado (1:1)
+        var HORIZONTAL_REEL_CODES = ['BpIgz5RFXOh'];      // se ve 16:9 horizontal
+        var DIRECT_PLAY_REELS = ['DM7Ut6AuYSl','CkcX0gzD7Mt']; // reproducen directo en el popup
+
+        function isReel(code) { return REEL_CODES.indexOf(code) !== -1; }
+
+        function reelWrapClass(code) {
+            if (HORIZONTAL_REEL_CODES.indexOf(code) !== -1) { return 'ig-embed-wrap horizontal'; }
+            if (SQUARE_REEL_CODES.indexOf(code) !== -1) { return 'ig-embed-wrap'; }
+            return isReel(code) ? 'ig-embed-wrap vertical' : 'ig-embed-wrap';
+        }
+
+        let igGallery = [];
+        let igIndex = 0;
+
+        function openGallery(codes, index) {
+            igGallery = codes;
+            igIndex = (typeof index === 'number') ? index : 0;
+            renderIgGallery();
+        }
+
+        function renderIgGallery() {
+            const modal = document.getElementById('media-modal');
+            const modalBody = document.getElementById('modal-body');
+            const code = igGallery[igIndex];
+            const multi = igGallery.length > 1;
+
+            let nav = '';
+            if (multi) {
+                nav += '<button onclick="igGo(-1)" class="ig-arrow" title="Anterior" ' + (igIndex === 0 ? 'disabled' : '') + '><i class="fas fa-chevron-left"></i></button>';
+                nav += '<div class="ig-center">' + igItem(code) + '</div>';
+                nav += '<button onclick="igGo(1)" class="ig-arrow" title="Siguiente" ' + (igIndex === igGallery.length - 1 ? 'disabled' : '') + '><i class="fas fa-chevron-right"></i></button>';
+            } else {
+                nav = '<div class="ig-center">' + igItem(code) + '</div>';
+            }
+
+            modalBody.innerHTML = '<div class="ig-row">' + nav + '</div>';
+
+            modal.classList.remove('hidden');
+        }
+
+        function igGo(dir) {
+            const next = igIndex + dir;
+            if (next < 0 || next >= igGallery.length) { return; }
+            igIndex = next;
+            renderIgGallery();
+        }
+
+        // Muestra un post de Instagram: embed recortado (solo multimedia)
+        function igItem(code) {
+            const cls = reelWrapClass(code);
+            const title = isReel(code) ? 'Reel' : 'Post de Instagram';
+            const direct = DIRECT_PLAY_REELS.indexOf(code) !== -1;
+            const embedUrl = 'https://www.instagram.com/' + (direct ? 'reel/' : 'p/') + code + '/embed/' + (direct ? '?autoplay=1' : '');
+            return '<div class="ig-item">' +
+                '<div class="' + cls + '"><iframe src="' + embedUrl + '" frameborder="0" scrolling="no" allowtransparency="true" referrerpolicy="no-referrer" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="' + title + '"></iframe></div>' +
+                '</div>';
+        }
+
+        // Iframe de un solo post de Instagram (single, no galería)
+        function igFrame(code) {
+            return igItem(code);
+        }
+
+        // Close Modal Handler
+        function closeModal() {
+            const modal = document.getElementById('media-modal');
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = '';
+            modal.classList.add('hidden');
+        }
+
+        // Close modal when pressing ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Hide the fullscreen intro (Comenzar button)
+        function hideIntro() {
+            const overlay = document.getElementById('intro-overlay');
+            // Subir al inicio de la página para entrar desde la parte superior
+            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+            overlay.classList.add('fade-out');
+            setTimeout(function() {
+                overlay.style.display = 'none';
+                // Reforzar el scroll al inicio por si algo lo desplazó
+                window.scrollTo(0, 0);
+            }, 700);
+        }
+
+        // (Logo de cabecera: imagen suburbio_logo_white_diag.png, ya no es video)
+
+        // Resuelve las miniaturas reales de Instagram / YouTube / Spotify
+        function resolveThumbs() {
+            // Instagram: miniaturas descargadas localmente (evita bloqueo de hotlink/CORS en el navegador)
+            document.querySelectorAll('img[data-ig]').forEach(function(img) {
+                img.setAttribute('referrerpolicy', 'no-referrer');
+                const code = img.getAttribute('data-ig');
+                img.src = 'thumbs/' + code + '.jpg';
+            });
+
+            document.querySelectorAll('img[data-yt]').forEach(function(img) {
+                img.src = 'https://img.youtube.com/vi/' + img.getAttribute('data-yt') + '/hqdefault.jpg';
+            });
+
+            document.querySelectorAll('img[data-sp]').forEach(function(img) {
+                const url = img.getAttribute('data-sp');
+                fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(url))
+                    .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
+                    .then(function(json) { if (json && json.thumbnail_url) { img.src = json.thumbnail_url; } })
+                    .catch(function() {});
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', resolveThumbs);
+        } else {
+            resolveThumbs();
+        }
+    </script>
+
+    <!-- Música de fondo del intro (audio local, invisible, sin UI; una sola reproducción) -->
+    <audio id="intro-audio" src="intro_audio.webm" preload="auto" autoplay style="display:none;"></audio>
+    <script>
+        // Reproduce el audio local con sonido desde el arranque, una sola vez hasta terminar.
+        // Nunca se pone en mudo: si el navegador bloquea el autoplay con audio, el primer
+        // scroll O clic/touch lo pone en play. Pulsar "Comenzar" NO lo detiene.
+        var introAudio = document.getElementById('intro-audio');
+        var started = false;
+
+        function startIntroAudio() {
+            if (started) { return; }
+            try {
+                started = true;
+                introAudio.muted = false;
+                introAudio.volume = 1;
+                var p = introAudio.play();
+                if (p !== undefined && p.catch) { p.catch(function() {}); }
+            } catch (err) {}
+            document.removeEventListener('click', startIntroAudio);
+            document.removeEventListener('touchstart', startIntroAudio);
+            document.removeEventListener('scroll', startIntroAudio);
+        }
+
+        if (introAudio.readyState > 0) {
+            startIntroAudio();
+        } else {
+            introAudio.addEventListener('loadeddata', startIntroAudio, { once: true });
+        }
+        document.addEventListener('click', startIntroAudio);
+        document.addEventListener('touchstart', startIntroAudio);
+        document.addEventListener('scroll', startIntroAudio);
+    </script>
+</body>
+</html>
